@@ -1,0 +1,58 @@
+Q. Top K Frequent Events with Order Preservation
+Given an array of integers and an integer k, return an array of the k most frequent elements. If two elements have the same frequency, prioritize the one that appears first.
+
+Example 1
+
+Input:
+
+events = [1, 2, 1, 3, 2, 1]
+k = 2
+Output:
+
+[1, 2]
+Explanation:
+
+Count frequencies: 1→3, 2→2, 3→1.
+The top two frequencies are for IDs 1 and 2, so the result is [1, 2].
+Example 2
+
+Input:
+
+events = [4, 4, 1, 2, 2, 3, 1, 3, 2]
+k = 3
+Output:
+
+[2, 4, 1]
+
+
+Learnings:
+
+// priority_queue<T, Container, Comparator>
+    // Why do we pass cmp in pq(cmp)?
+
+    // This is the key concept.
+
+//  Because lambda is NOT a type-only thing — it's an object
+// decltype(cmp) → gives the type
+// But priority_queue also needs an instance of that comparator
+
+// internally
+// priority_queue stores a comparator object like: Compare cmp;
+    
+    // you're passing that comparator object to initialize it.
+    
+
+
+
+
+1,3 1,2 2,2 2,1 1,1 3,1
+
+
+// bcoz lamdas are not initialized -  Lambdas don’t always have a default constructor (especially if they //capture variables)
+ auto cmp = [](const pair<int, int>& a,const pair<int,int>&b) {return a.second > b.second;};
+    
+    
+    std::priority_queue<
+    std::pair<int,int>, 
+    std::vector<std::pair<int,int>>, 
+    decltype(cmp)> pq(cmp);
