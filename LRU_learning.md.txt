@@ -1,0 +1,56 @@
+# LRU Cache Quick Reference
+
+## Best STL Design
+
+* `list<int> lru`
+* `unordered_map<int, pair<int, list<int>::iterator>> mp`
+* One hashmap is enough: store **value + iterator**.
+* Reserve capacity for unordered map - mp to avoid rehashing.
+
+  * ```cpp mp.reserve(capacity); ```
+
+## Recency Order
+
+* `front` = Least Recently Used
+* `back` = Most Recently Used
+
+## Reposition Key (Best)
+
+```cpp
+lru.splice(lru.end(), lru, mp[key].second);
+```
+
+* Moves node to back
+* O(1)
+* Zero copy / no reallocation
+
+## Avoid
+
+* `find(list.begin(), list.end(), key)` ❌ O(n)
+* `deque` for middle erase ❌
+* Two separate maps unless needed ❌
+* `mp[key]` for existence checks ❌ use `find()`
+
+## get(key)
+
+* if missing -> `-1`
+* move to back
+* return value
+
+## put(key,val)
+
+* if exists: update + move to back
+* if full:
+
+  * evict `lru.front()`
+  * erase from map
+* insert new key at back
+
+## Complexity
+
+* `get()` = O(1)
+* `put()` = O(1)
+
+## Interview Line
+
+> HashMap for lookup + Doubly Linked List for usage order.

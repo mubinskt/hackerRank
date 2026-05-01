@@ -1,0 +1,58 @@
+# Circular Queue Quick Learnings
+
+## Best Structure
+
+* Fixed-size queue -> `vector<int>` ring buffer
+* Better than linked list for fixed capacity (cache-friendly, no heap allocs)
+
+## Core State
+
+```cpp
+vector<int> buf(k);
+int head = 0;
+int tail = 0;
+int size = 0;
+```
+
+## Important
+
+* `reserve(k)` = capacity only, no usable indexed elements
+* `resize(k)` or `vector<int> buf(k)` = creates `k` usable slots
+
+## Enqueue
+
+```cpp
+buf[tail] = x;
+tail = (tail + 1) % k;
+size++;
+```
+
+## Dequeue
+
+```cpp
+head = (head + 1) % k;
+size--;
+```
+
+* Zero copy remove (just move pointer)
+
+## Front / Rear
+
+```cpp
+Front = buf[head]
+Rear  = buf[(tail - 1 + k) % k] //prev tail -in case of tail = 0, 
+                               // we need to wrap it around the capacity
+```
+
+## Why `size` Helps
+
+* `head == tail` can mean empty OR full
+* `size` removes ambiguity
+
+## Complexity
+
+* All ops O(1)
+
+## Interview Line
+
+> Circular queue = array/vector + modulo indexing + head/tail pointers.
